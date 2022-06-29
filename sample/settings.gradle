@@ -1,0 +1,15 @@
+rootProject.name = "sample"
+
+// replace maven dependencies with project dependencies
+includeBuild("../recomposition-logger-support") {
+    dependencySubstitution {
+        substitute(module("com.welltech:recomposition-logger-annotations")).using(project(":recomposition-logger-annotations"))
+        substitute(module("com.welltech:recomposition-logger-runtime")).using(project(":recomposition-logger-runtime"))
+    }
+}
+includeBuild("../recomposition-logger-plugin") {
+    dependencySubstitution {
+        substitute(module("com.welltech:recomposition-logger-plugin")).using(project(":gradle-plugin"))
+        substitute(module("com.welltech:recomposition-logger-compiler-plugin")).using(project(":compiler-plugin"))
+    }
+}

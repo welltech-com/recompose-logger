@@ -1,0 +1,46 @@
+plugins {
+    `maven-publish`
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+        // TODO set public repo
+    }
+
+    task("sourceJar", Jar::class) {
+        from("$projectDir/src/main/java")
+        archiveClassifier.set("sources")
+    }
+
+    publications {
+        create("AndroidLibrary", MavenPublication::class).apply {
+            groupId = config.group
+            version = config.version
+
+            artifact("$buildDir/outputs/aar/${project.name}-release.aar")
+            artifact(tasks.getByName("sourceJar"))
+
+            pom {
+                withXml {
+                    val dependencies = asNode().appendNode("dependencies")
+                    configurations.getByName("releaseCompileClasspath")
+                        .resolvedConfiguration
+                        .firstLevelModuleDependencies
+                        .forEach {
+                            if (it.moduleVersion != "unspecified") {
+                                val dependency = dependencies.appendNode("dependency")
+                                dependency.appendNode("groupId", it.moduleGroup)
+                                dependency.appendNode("artifactId", it.moduleName)
+                                dependency.appendNode("version", it.moduleVersion)
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    tasks["publishAndroidLibraryPublicationToMavenLocal"].apply {
+        dependsOn(project.tasks.get("assemble"))
+    }
+}
