@@ -41,6 +41,11 @@ publishing {
     publications {
         getByName<MavenPublication>("AndroidLibrary").apply {
             artifactId = config.annotationsLibArtifact
+            pom {
+                name.set("Recomposition Logger annotations")
+                description.set("Support library for Recomposition Logger plugin that contains annotations")
+                url.set("https://github.com/welltech-com/recompose-logger")
+            }
         }
     }
 }

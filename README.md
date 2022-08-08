@@ -8,7 +8,7 @@ The plugin also highlights composable functions during recomposition
 </video>
 
 ## requirements: 
-- kotlin 1.6.10
+- kotlin 1.7.0
 
 Older versions of kotlin are not tested but may work.
 
@@ -16,8 +16,10 @@ Older versions of kotlin are not tested but may work.
 ### root build.gradle
 ```kotlin
 buildscript {
-    // ...
-
+    repositories {
+       // ...
+       mavenCentral()  
+    }
     dependencies {
         // ...
       classpath("com.welltech:recomposition-logger-plugin:$version")
