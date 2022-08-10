@@ -1,12 +1,14 @@
 plugins {
     `maven-publish`
+    `signing`
+}
+
+extensions.configure<SigningExtension> {
+    sign(publishing.publications)
 }
 
 publishing {
-    repositories {
-        mavenLocal()
-        // TODO set public repo
-    }
+    setupPublishingRepositories(project)
 
     task("sourceJar", Jar::class) {
         from("$projectDir/src/main/java")
@@ -22,25 +24,39 @@ publishing {
             artifact(tasks.getByName("sourceJar"))
 
             pom {
+                setupDefaultPom()
+
                 withXml {
-                    val dependencies = asNode().appendNode("dependencies")
-                    configurations.getByName("releaseCompileClasspath")
-                        .resolvedConfiguration
-                        .firstLevelModuleDependencies
-                        .forEach {
-                            if (it.moduleVersion != "unspecified") {
-                                val dependency = dependencies.appendNode("dependency")
-                                dependency.appendNode("groupId", it.moduleGroup)
-                                dependency.appendNode("artifactId", it.moduleName)
-                                dependency.appendNode("version", it.moduleVersion)
-                            }
+                    asNode().apply {
+                        // dependencies
+                        appendNode("dependencies").apply {
+                            configurations.getByName("releaseCompileClasspath")
+                                .resolvedConfiguration
+                                .firstLevelModuleDependencies
+                                .forEach {
+                                    if (it.moduleVersion != "unspecified") {
+                                        val dependency = appendNode("dependency")
+                                        dependency.appendNode("groupId", it.moduleGroup)
+                                        dependency.appendNode("artifactId", it.moduleName)
+                                        dependency.appendNode("version", it.moduleVersion)
+                                    }
+                                }
                         }
+                    }
                 }
             }
         }
     }
 
-    tasks["publishAndroidLibraryPublicationToMavenLocal"].apply {
-        dependsOn(project.tasks.get("assemble"))
+    tasks.register("buildAndPublishToMavenLocal") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMavenLocal"))
+    }
+
+    tasks.register("buildAndPublishToMavenRepository") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMavenRepository"))
+    }
+
+    tasks.register("buildAndPublishToSnapshotRepository") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMaven2Repository"))
     }
 }

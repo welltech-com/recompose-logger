@@ -2,11 +2,8 @@ package com.welltech.gradle_plugin
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
-import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
-import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 import com.welltech.gradle_plugin.extension.RecompositionLoggerGradleExtension
+import org.jetbrains.kotlin.gradle.plugin.*
 
 class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
     override fun apply(target: Project): Unit = with(target) {
@@ -36,6 +33,13 @@ class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
         val pluginEnabled = extension.enabled ?: kotlin.run {
             project.gradle.startParameter.taskRequests.any {
                 it.args.any { it.endsWith("Debug") }
+            }
+        }
+        if (pluginEnabled) {
+            val kotlinVersion = project.getKotlinPluginVersion()
+            project.logger.warn("kotlin version in project: $kotlinVersion")
+            if (kotlinVersion != BuildConfig.KOTLIN_VERSION) {
+                error("Require kotlin version ${BuildConfig.KOTLIN_VERSION} but current: $kotlinVersion")
             }
         }
         val logsTag = extension.tag ?: BuildConfig.DEFAULT_RECOMPOSITION_LOGS_TAG

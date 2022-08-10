@@ -36,7 +36,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Versions.composeCompilerVersion
     }
 
     compileOptions {
@@ -49,6 +49,11 @@ publishing {
     publications {
         getByName<MavenPublication>("AndroidLibrary").apply  {
             artifactId = config.runtimeLibArtifact
+            pom {
+                name.set("Recomposition Logger runtime")
+                description.set("Support library for Recomposition Logger plugin that contains runtime methods")
+                url.set("https://github.com/welltech-com/recompose-logger")
+            }
         }
     }
 }
