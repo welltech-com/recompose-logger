@@ -7,13 +7,13 @@ do
 done < "$properties"
 
 if [[ $version == *"-SNAPSHOT" ]]; then
-  ./gradlew :recomposition-logger-plugin:compiler-plugin:buildAndPublishToMaven2Repository
-  ./gradlew :recomposition-logger-plugin:gradle-plugin:buildAndPublishToMaven2Repository
-  ./gradlew :recomposition-logger-support:recomposition-logger-runtime:publishAndroidLibraryPublicationToMaven2Repository
-  ./gradlew :recomposition-logger-support:recomposition-logger-annotations:publishAndroidLibraryPublicationToMaven2Repository
+  ./gradlew :recomposition-logger-plugin:compiler-plugin:buildAndPublishToSnapshotRepository
+  ./gradlew :recomposition-logger-plugin:gradle-plugin:buildAndPublishToSnapshotRepository
+  ./gradlew :recomposition-logger-support:recomposition-logger-runtime:buildAndPublishToSnapshotRepository
+  ./gradlew :recomposition-logger-support:recomposition-logger-annotations:buildAndPublishToSnapshotRepository
 else
   ./gradlew :recomposition-logger-plugin:compiler-plugin:buildAndPublishToMavenRepository
   ./gradlew :recomposition-logger-plugin:gradle-plugin:buildAndPublishToMavenRepository
-  ./gradlew :recomposition-logger-support:recomposition-logger-runtime:publishAndroidLibraryPublicationToMavenRepository
-  ./gradlew :recomposition-logger-support:recomposition-logger-annotations:publishAndroidLibraryPublicationToMavenRepository
+  ./gradlew :recomposition-logger-support:recomposition-logger-runtime:buildAndPublishToMavenRepository
+  ./gradlew :recomposition-logger-support:recomposition-logger-annotations:buildAndPublishToMavenRepository
 fi

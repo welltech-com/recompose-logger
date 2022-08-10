@@ -48,13 +48,15 @@ publishing {
         }
     }
 
-    tasks["publishAndroidLibraryPublicationToMavenLocal"].apply {
-        dependsOn(project.tasks["assemble"])
+    tasks.register("buildAndPublishToMavenLocal") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMavenLocal"))
     }
-    tasks["publishAndroidLibraryPublicationToMavenRepository"].apply {
-        dependsOn(project.tasks["assemble"])
+
+    tasks.register("buildAndPublishToMavenRepository") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMavenRepository"))
     }
-    tasks["publishAndroidLibraryPublicationToMaven2Repository"].apply {
-        dependsOn(project.tasks["assemble"])
+
+    tasks.register("buildAndPublishToSnapshotRepository") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMaven2Repository"))
     }
 }

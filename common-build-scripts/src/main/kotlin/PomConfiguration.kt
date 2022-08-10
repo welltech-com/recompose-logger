@@ -10,12 +10,11 @@ fun MavenPom.setupDefaultPom() {
 
     developers {
         listOf(
-            "Evgeniy Kurinnoy" to "evgeniy.kurinnoy@welltech.com",
-            "Aleksandr Trykashnyi" to "aleksandr.trykashnyi@welltech.com"
-        ).forEach { (devName, devEmail) ->
+            "Evgeniy Kurinnoy",
+            "Aleksandr Trykashnyi"
+        ).forEach { devName ->
             developer {
                 name.set(devName)
-                email.set(devEmail)
                 organization.set("Welltech")
                 organizationUrl.set("https://welltech.com/")
             }

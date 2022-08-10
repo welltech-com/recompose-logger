@@ -64,6 +64,6 @@ tasks.register("buildAndPublishToMavenRepository") {
     dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToMavenRepository"))
 }
 
-tasks.register("buildAndPublishToMaven2Repository") {
+tasks.register("buildAndPublishToSnapshotRepository") {
     dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToMaven2Repository"))
 }

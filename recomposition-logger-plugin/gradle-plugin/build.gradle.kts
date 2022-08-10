@@ -80,7 +80,7 @@ tasks.register("buildAndPublishToMavenRepository") {
         tasks.named("publishPluginMavenPublicationToMavenRepository"))
 }
 
-tasks.register("buildAndPublishToMaven2Repository") {
+tasks.register("buildAndPublishToSnapshotRepository") {
     dependsOn(tasks.named("assemble"),
         tasks.named("publishPluginMavenPublicationToMaven2Repository"))
 }
