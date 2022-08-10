@@ -8,8 +8,21 @@ buildscript {
     }
 }
 
-subprojects {
+allprojects {
     repositories {
         mavenCentral()
     }
+
+    tasks.register("buildAndPublishToMavenLocal") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToMavenLocal"))
+    }
+
+    tasks.register("buildAndPublishToMavenRepository") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToStagingRepository"))
+    }
+
+    tasks.register("buildAndPublishToSnapshotRepository") {
+        dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToSnapshotRepository"))
+    }
+
 }

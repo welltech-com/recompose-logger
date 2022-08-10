@@ -9,6 +9,7 @@ fun PublishingExtension.setupPublishingRepositories(project: Project) {
        this@setupPublishingRepositories.repositories {
             mavenLocal()
             maven {
+                name = "Staging"
                 mavenContent {
                     releasesOnly()
                 }
@@ -19,6 +20,7 @@ fun PublishingExtension.setupPublishingRepositories(project: Project) {
                 }
             }
             maven {
+                name = "Snapshot"
                 mavenContent {
                     snapshotsOnly()
                 }
