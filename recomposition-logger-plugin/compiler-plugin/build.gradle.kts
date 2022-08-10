@@ -7,6 +7,7 @@ plugins {
     `maven-publish`
     `signing`
     id("plugin-options-config")
+    id("org.jetbrains.dokka") version "1.7.10"
 }
 
 group = pluginConfig.group
@@ -28,6 +29,14 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
 
+val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
+
+val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+    dependsOn(dokkaHtml)
+    archiveClassifier.set("javadoc")
+    from(dokkaHtml.outputDirectory)
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -45,6 +54,7 @@ publishing {
             artifactId = pluginConfig.compilerPluginName
             from(components["java"])
             artifact(tasks.kotlinSourcesJar)
+            artifact(javadocJar)
 
             pom {
                 setupDefaultPom()
@@ -54,16 +64,4 @@ publishing {
             }
         }
     }
-}
-
-tasks.register("buildAndPublishToMavenLocal") {
-    dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToMavenLocal"))
-}
-
-tasks.register("buildAndPublishToMavenRepository") {
-    dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToMavenRepository"))
-}
-
-tasks.register("buildAndPublishToSnapshotRepository") {
-    dependsOn(tasks.named("assemble"), tasks.named("publishDefaultPublicationToMaven2Repository"))
 }

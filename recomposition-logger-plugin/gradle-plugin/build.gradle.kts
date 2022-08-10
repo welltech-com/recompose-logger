@@ -7,6 +7,7 @@ plugins {
     id("plugin-options-config")
     `maven-publish`
     `signing`
+    id("org.jetbrains.dokka") version "1.7.10"
 }
 
 version = pluginConfig.version
@@ -33,6 +34,14 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
 }
 
+val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
+
+val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+    dependsOn(dokkaHtml)
+    archiveClassifier.set("javadoc")
+    from(dokkaHtml.outputDirectory)
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -56,8 +65,12 @@ publishing {
     setupPublishingRepositories(project)
 
     publications {
-        maybeCreate<MavenPublication>("pluginMaven").apply {
+        create<MavenPublication>("default") {
             artifactId = pluginConfig.gradlePluginName
+            from(components["java"])
+            artifact(tasks.kotlinSourcesJar)
+            artifact(javadocJar)
+
             pom {
                 setupDefaultPom()
                 name.set("Recomposition Logger gradle plugin")
@@ -69,18 +82,4 @@ publishing {
             }
         }
     }
-}
-
-tasks.register("buildAndPublishToMavenLocal") {
-    dependsOn(tasks.named("assemble"), tasks.named("publishPluginMavenPublicationToMavenLocal"))
-}
-
-tasks.register("buildAndPublishToMavenRepository") {
-    dependsOn(tasks.named("assemble"),
-        tasks.named("publishPluginMavenPublicationToMavenRepository"))
-}
-
-tasks.register("buildAndPublishToSnapshotRepository") {
-    dependsOn(tasks.named("assemble"),
-        tasks.named("publishPluginMavenPublicationToMaven2Repository"))
 }

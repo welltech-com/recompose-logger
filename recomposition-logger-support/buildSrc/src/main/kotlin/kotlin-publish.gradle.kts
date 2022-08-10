@@ -53,10 +53,10 @@ publishing {
     }
 
     tasks.register("buildAndPublishToMavenRepository") {
-        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMavenRepository"))
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToStagingRepository"))
     }
 
     tasks.register("buildAndPublishToSnapshotRepository") {
-        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToMaven2Repository"))
+        dependsOn(tasks.named("assemble"), tasks.named("publishAndroidLibraryPublicationToSnapshotRepository"))
     }
 }
