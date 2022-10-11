@@ -7,10 +7,9 @@ The plugin also highlights composable functions during recomposition
   <source src="sample_record.mov" type="video/mp4">
 </video>
 
-## requirements: 
-- kotlin 1.7.0
-
-Older versions of kotlin are not tested but may work.
+## requirements:
+- v1.2.0: kotlin 1.7.20
+- v1.1.0: kotlin 1.7.0
 
 # Integration
 ### root build.gradle
