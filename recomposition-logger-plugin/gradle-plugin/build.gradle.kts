@@ -58,6 +58,7 @@ gradlePlugin {
 }
 
 extensions.configure<SigningExtension> {
+    configureGpg()
     sign(publishing.publications)
 }
 
