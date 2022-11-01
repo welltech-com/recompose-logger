@@ -44,13 +44,18 @@ jobs:
           echo "TAG_NAME=$( (grep -w "version" | cut -d= -f2) <common.properties)" >> $GITHUB_OUTPUT
         id: version
 
-      - name: Retrieve the release body
+      - name: debug
         run: |
-          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
-          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
-        id: gitHubReleaseBody
-        env:
-          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
+          cat CHANGELOG.md
+        id: debug
+
+#      - name: Retrieve the release body
+#        run: |
+#          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
+#          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
+#        id: gitHubReleaseBody
+#        env:
+#          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
@@ -58,4 +63,5 @@ jobs:
           tag: "v${{ steps.version.outputs.TAG_NAME }}"
           name: "v${{ steps.version.outputs.TAG_NAME }}"
 #          body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
-          omitBody: true
+          bodyFile: "CHANGELOG.md"
+#          omitBody: true
