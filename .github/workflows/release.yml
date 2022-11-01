@@ -63,7 +63,7 @@ jobs:
           echo $GITHUB_RELEASE_BODY
         id: debug
         env:
-          TAG_NAME: ${{ steps.version.outputs.GITHUB_RELEASE_BODY }}
+          GITHUB_RELEASE_BODY: ${{ steps.version.outputs.GITHUB_RELEASE_BODY }}
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
