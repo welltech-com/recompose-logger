@@ -49,14 +49,20 @@ jobs:
 #          cat CHANGELOG.md
 #        id: debug
 
+#      - name: Retrieve the release body
+#        run: |
+#          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
+#          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
+#        id: gitHubReleaseBody
+#        env:
+#          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
+
       - name: Retrieve the release body
         run: |
-          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
-          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
+          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')" >> $GITHUB_OUTPUT
         id: gitHubReleaseBody
         env:
           TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
-
 
       - name: debug
         run: |
@@ -64,7 +70,7 @@ jobs:
         shell: bash
         id: debug
         env:
-          GITHUB_RELEASE_BODY: ${{ steps.version.outputs.GITHUB_RELEASE_BODY }}
+          GITHUB_RELEASE_BODY: ${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
