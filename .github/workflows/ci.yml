@@ -16,8 +16,8 @@ jobs:
           java-version: 11
       - uses: android-actions/setup-android@v2
 
-      - name: Run script file
-        run: |
-          chmod +x ./build.sh
-          ./build.sh
-        shell: bash
+#      - name: Run script file
+#        run: |
+#          chmod +x ./build.sh
+#          ./build.sh
+#        shell: bash

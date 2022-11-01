@@ -18,16 +18,16 @@ jobs:
           java-version: 11
       - uses: android-actions/setup-android@v2
 
-      - name: Run script file
-        run: |
-          chmod +x ./publish.sh
-          ./publish.sh
-        shell: bash
-        env:
-          OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
-          OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
+#      - name: Run script file
+#        run: |
+#          chmod +x ./publish.sh
+#          ./publish.sh
+#        shell: bash
+#        env:
+#          OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
+#          OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
+#          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+#          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
   releaseApp:
     needs: buildAppAndPublishToNexus
@@ -36,6 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: feature/configure-cicd
 
       - name: Retrieve the release version
         run: |
