@@ -1,6 +1,7 @@
 name: appBuild
 
 on:
+  # Triggers the workflow on pull request events but only for the "main" branch
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
