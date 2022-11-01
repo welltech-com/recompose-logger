@@ -36,8 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: feature/configure-cicd
+#        with:
+#          ref: feature/configure-cicd
 
       - name: Retrieve the release version
         run: |
@@ -57,4 +57,5 @@ jobs:
         with:
           tag: "v${{ steps.version.outputs.TAG_NAME }}"
           name: "v${{ steps.version.outputs.TAG_NAME }}"
-          body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
+#          body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
+          omitBody: true
