@@ -18,16 +18,16 @@ jobs:
           java-version: 11
       - uses: android-actions/setup-android@v2
 
-      - name: Run script file
-        run: |
-          chmod +x ./publish.sh
-          ./publish.sh
-        shell: bash
-        env:
-          OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
-          OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
+#      - name: Run script file
+#        run: |
+#          chmod +x ./publish.sh
+#          ./publish.sh
+#        shell: bash
+#        env:
+#          OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
+#          OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
+#          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+#          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
   releaseApp:
     needs: buildAppAndPublishToNexus
@@ -42,9 +42,17 @@ jobs:
           echo "TAG_NAME=$( (grep -w "version" | cut -d= -f2) <common.properties)" >> $GITHUB_OUTPUT
         id: version
 
+#      - name: Retrieve the release body
+#        run: |
+#          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')" >> $GITHUB_OUTPUT
+#        id: gitHubReleaseBody
+#        env:
+#          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
+
       - name: Retrieve the release body
         run: |
-          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')" >> $GITHUB_OUTPUT
+          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
+          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
         id: gitHubReleaseBody
         env:
           TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
@@ -55,3 +63,4 @@ jobs:
           tag: "v${{ steps.version.outputs.TAG_NAME }}"
           name: "v${{ steps.version.outputs.TAG_NAME }}"
           body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
+#          body: cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //'
