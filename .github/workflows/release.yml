@@ -3,8 +3,6 @@ name: appRelease
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -18,16 +16,16 @@ jobs:
           java-version: 11
       - uses: android-actions/setup-android@v2
 
-#      - name: Run script file
-#        run: |
-#          chmod +x ./publish.sh
-#          ./publish.sh
-#        shell: bash
-#        env:
-#          OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
-#          OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
-#          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-#          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
+      - name: Run script file
+        run: |
+          chmod +x ./publish.sh
+          ./publish.sh
+        shell: bash
+        env:
+          OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
+          OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
   releaseApp:
     needs: buildAppAndPublishToNexus
@@ -50,17 +48,9 @@ jobs:
         env:
           TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
 
-      - name: debug
-        run: |
-          printenv | grep GITHUB_RELEASE_BODY
-        shell: bash
-        id: debug
-        env:
-          GITHUB_RELEASE_BODY: ${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}
-
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-#          tag: "v${{ steps.version.outputs.TAG_NAME }}"
+          tag: "v${{ steps.version.outputs.TAG_NAME }}"
           name: "v${{ steps.version.outputs.TAG_NAME }}"
           body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
