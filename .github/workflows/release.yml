@@ -33,7 +33,7 @@ jobs:
           SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
   releaseApp:
-    needs: buildApp
+    needs: buildAppAndPublishToNexus
     permissions:
       contents: write
     runs-on: ubuntu-latest
