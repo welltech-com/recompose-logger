@@ -1,3 +1,6 @@
+# 1.2.1
+
+- tested CI pipelines
 
 # 1.2.0
 

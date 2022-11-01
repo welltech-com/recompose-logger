@@ -10,9 +10,6 @@ on:
 jobs:
   buildAppAndPublishToNexus:
     runs-on: ubuntu-latest
-#    outputs:
-      # in case there's a commit between buildSampleApp and releaseApp jobs...
-#      GIT_TAG: ${{ github.event.ref }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
@@ -39,9 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-#        with:
-#           A branch is required for post release version increment commit
-#          ref: ${{ needs.buildAppAndPublishToNexus.outputs.GIT_TAG }}
 
       - name: Retrieve the release version
         run: |
@@ -58,6 +52,6 @@ jobs:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          tag: "${{ steps.version.outputs.TAG_NAME }}-test"
-          name: "test release just to check CI ${{ github.event.repository.name }} v${{ steps.version.outputs.appVersion }}"
+          tag: "v${{ steps.version.outputs.TAG_NAME }}"
+          name: "v${{ steps.version.outputs.TAG_NAME }}"
           body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
