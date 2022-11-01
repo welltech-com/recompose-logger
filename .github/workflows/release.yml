@@ -1,24 +1,19 @@
-name: Release
+name: appRelease
 
 on:
-  # Triggers the workflow on push events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  buildAppAndPublishToNexus:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+#    outputs:
+      # in case there's a commit between buildSampleApp and releaseApp jobs...
+#      GIT_TAG: ${{ github.event.ref }}
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
@@ -26,33 +21,43 @@ jobs:
           java-version: 11
       - uses: android-actions/setup-android@v2
 
-#      - id: decodeAppKeystore
-#        run: |
-#          echo "${{ env.APP_SIGNING_KEYFILE_BASE64 }}" | base64 --decode - > "$HOME/key.jks"
-#          echo "::set-output name=APP_SIGNING_KEYFILE::$HOME/key.jks"
-#        env:
-#          APP_SIGNING_KEYFILE_BASE64: ${{ secrets.APP_SIGNING_KEYFILE_BASE64 }}
-
       - name: Run script file
         run: |
           chmod +x ./publish.sh
           ./publish.sh
         shell: bash
         env:
-#          APP_SIGNING_KEYFILE: ${{ steps.decodeAppKeystore.outputs.APP_SIGNING_KEYFILE }}
-#          APP_SIGNING_PASS: ${{ secrets.APP_SIGNING_PASS }}
-#          APP_SIGNING_ALIAS: ${{ secrets.APP_SIGNING_ALIAS }}
           OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
           OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
 
-#      - run: ./gradlew lintRelease publishToMavenLocal publishToSonatype closeSonatypeStagingRepository | tee publishToSonatype.log
-#        # bash has pipefail on by default, which is needed for tee to fail, if gradle fails
-#        shell: bash
-#        env:
-#          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
-#          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
-#          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-#          SIGNING_PASS: ${{ secrets.SIGNING_PASS }}
+  releaseApp:
+    needs: buildApp
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+#        with:
+#           A branch is required for post release version increment commit
+#          ref: ${{ needs.buildAppAndPublishToNexus.outputs.GIT_TAG }}
 
+      - name: Retrieve the release version
+        run: |
+          echo "TAG_NAME=$( (grep -w "version" | cut -d= -f2) <common.properties)" >> $GITHUB_OUTPUT
+        id: version
+
+      - name: Retrieve =the release body
+        run: |
+          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' | grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n')" >> $GITHUB_OUTPUT
+        id: gitHubReleaseBody
+        env:
+          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{ steps.version.outputs.TAG_NAME }}-test"
+          name: "test release just to check CI ${{ github.event.repository.name }} v${{ steps.version.outputs.appVersion }}"
+          body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
