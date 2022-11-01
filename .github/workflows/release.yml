@@ -49,24 +49,24 @@ jobs:
 #          cat CHANGELOG.md
 #        id: debug
 
-      - name: Retrieve the release body
-        run: |
-          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
-          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
-        id: gitHubReleaseBody
-        env:
-          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
-
 #      - name: Retrieve the release body
 #        run: |
-#          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')" >> $GITHUB_OUTPUT
+#          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
+#          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
 #        id: gitHubReleaseBody
 #        env:
 #          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
 
+      - name: Retrieve the release body
+        run: |
+          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')" >> $GITHUB_ENV
+        id: gitHubReleaseBody
+        env:
+          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
+
       - name: debug
         run: |
-          printenv
+          printenv | grep GITHUB_RELEASE_BODY
         shell: bash
         id: debug
         env:
@@ -77,6 +77,6 @@ jobs:
         with:
           tag: "v${{ steps.version.outputs.TAG_NAME }}"
           name: "v${{ steps.version.outputs.TAG_NAME }}"
-          body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
+#          body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
 #          bodyFile: "CHANGELOG.md"
-#          omitBody: true
+          body: "true"
