@@ -1,6 +1,6 @@
 # 1.2.1
 
-- tested CI pipelines
+- configured CI/CD pipelines for the project
 
 # 1.2.0
 
