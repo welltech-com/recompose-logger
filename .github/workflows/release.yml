@@ -36,33 +36,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-#        with:
-#          ref: feature/configure-cicd
 
       - name: Retrieve the release version
         run: |
           echo "TAG_NAME=$( (grep -w "version" | cut -d= -f2) <common.properties)" >> $GITHUB_OUTPUT
         id: version
 
-#      - name: debug
-#        run: |
-#          cat CHANGELOG.md
-#        id: debug
-
-#      - name: Retrieve the release body
-#        run: |
-#          GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')
-#          echo "::set-output name=content::$GITHUB_RELEASE_BODY"
-#        id: gitHubReleaseBody
-#        env:
-#          TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
-
       - name: Retrieve the release body
         run: |
           message=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //' | tr '\n' ' ' | sed 's/ / - /')
           echo "GITHUB_RELEASE_BODY=$message" >> $GITHUB_OUTPUT
-#          printenv
-#          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //' | sed -e 's/ /_/g')" >> $GITHUB_ENV
         id: gitHubReleaseBody
         env:
           TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
@@ -78,8 +61,6 @@ jobs:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          tag: "v${{ steps.version.outputs.TAG_NAME }}"
+#          tag: "v${{ steps.version.outputs.TAG_NAME }}"
           name: "v${{ steps.version.outputs.TAG_NAME }}"
           body: "${{ steps.gitHubReleaseBody.outputs.GITHUB_RELEASE_BODY }}"
-#          bodyFile: "CHANGELOG.md"
-#          body: "true"
