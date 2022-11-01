@@ -42,9 +42,9 @@ jobs:
           echo "TAG_NAME=$( (grep -w "version" | cut -d= -f2) <common.properties)" >> $GITHUB_OUTPUT
         id: version
 
-      - name: Retrieve =the release body
+      - name: Retrieve the release body
         run: |
-          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' | grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n')" >> $GITHUB_OUTPUT
+          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')" >> $GITHUB_OUTPUT
         id: gitHubReleaseBody
         env:
           TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
