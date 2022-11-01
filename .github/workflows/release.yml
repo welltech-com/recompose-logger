@@ -60,7 +60,8 @@ jobs:
 
       - name: debug
         run: |
-          echo $GITHUB_RELEASE_BODY
+          printenv
+        shell: bash
         id: debug
         env:
           GITHUB_RELEASE_BODY: ${{ steps.version.outputs.GITHUB_RELEASE_BODY }}
