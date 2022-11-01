@@ -59,7 +59,7 @@ jobs:
 
       - name: Retrieve the release body
         run: |
-          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //')" >> $GITHUB_ENV
+          echo "GITHUB_RELEASE_BODY=$(cat CHANGELOG.md | tr '\n' ';;' |  grep -oE "\#{1,2}\ *$TAG_NAME[^\#]*(\#|\Z)" | tr ';;' '\n' | sed '/^#/d' | tr -d '-' | sed 's/ //' | sed -e 's/ /_/g')" >> $GITHUB_ENV
         id: gitHubReleaseBody
         env:
           TAG_NAME: ${{ steps.version.outputs.TAG_NAME }}
