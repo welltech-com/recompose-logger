@@ -3,10 +3,9 @@ import org.gradle.api.publish.PublishingExtension
 
 fun PublishingExtension.setupPublishingRepositories(project: Project) {
     with(project) {
-        val localProperties = loadProperties("../local.properties")
-        val ossUsername = localProperties.getProperty("oss_username")
-        val ossPassword = localProperties.getProperty("oss_password")
-       this@setupPublishingRepositories.repositories {
+        val ossUsername = System.getenv()["OSS_USERNAME"]
+        val ossPassword = System.getenv()["OSS_PASSWORD"]
+        this@setupPublishingRepositories.repositories {
             mavenLocal()
             maven {
                 name = "Staging"

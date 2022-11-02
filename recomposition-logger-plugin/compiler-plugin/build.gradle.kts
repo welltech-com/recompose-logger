@@ -43,6 +43,7 @@ java {
 }
 
 extensions.configure<SigningExtension> {
+    configureGpg()
     sign(publishing.publications)
 }
 
