@@ -1,6 +1,7 @@
 package com.welltech.compiler_plugin.generations
 
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
+import org.jetbrains.kotlin.backend.common.extensions.FirIncompatiblePluginAPI
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder
@@ -33,6 +34,7 @@ private class ComposeLogTransformer(
 
   private val typeString = pluginContext.irBuiltIns.stringType
 
+  @OptIn(FirIncompatiblePluginAPI::class)
   private val funLog = pluginContext.referenceFunctions(FqName("com.welltech.recomposition_logger_runtime.LogComposition"))
     .single {
       val parameters = it.owner.valueParameters

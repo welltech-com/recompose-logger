@@ -37,7 +37,6 @@ class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
         }
         if (pluginEnabled) {
             val kotlinVersion = project.getKotlinPluginVersion()
-            project.logger.warn("kotlin version in project: $kotlinVersion")
             if (kotlinVersion != BuildConfig.KOTLIN_VERSION) {
                 error("Require kotlin version ${BuildConfig.KOTLIN_VERSION} but current: $kotlinVersion")
             }

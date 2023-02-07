@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.ir.util.statements
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.FqNameUnsafe
 import com.welltech.compiler_plugin.debug_logger.Logger
+import org.jetbrains.kotlin.backend.common.extensions.FirIncompatiblePluginAPI
 
 class HighlightGenerationExtension(
     private val logger: Logger
@@ -27,6 +28,7 @@ class HighlightGenerationExtension(
     }
 }
 
+@OptIn(FirIncompatiblePluginAPI::class)
 private class HighlightTransformer(
     private val pluginContext: IrPluginContext,
     private val logger: Logger

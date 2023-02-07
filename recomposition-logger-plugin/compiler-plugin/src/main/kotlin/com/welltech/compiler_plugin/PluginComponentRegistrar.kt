@@ -9,7 +9,9 @@ import com.welltech.compiler_plugin.generations.HighlightGenerationExtension
 import com.welltech.compiler_plugin.generations.LogsGenerationExtension
 import com.welltech.compiler_plugin.debug_logger.EmptyLogger
 import com.welltech.compiler_plugin.debug_logger.FileLogger
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 
+@OptIn(ExperimentalCompilerApi::class)
 @AutoService(ComponentRegistrar::class)
 class PluginComponentRegistrar : ComponentRegistrar {
 
