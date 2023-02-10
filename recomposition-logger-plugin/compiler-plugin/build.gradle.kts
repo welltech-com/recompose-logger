@@ -7,7 +7,7 @@ plugins {
     `maven-publish`
     `signing`
     id("plugin-options-config")
-    id("org.jetbrains.dokka") version "1.7.10"
+    id("org.jetbrains.dokka") version "1.7.20"
 }
 
 group = pluginConfig.group
@@ -17,7 +17,7 @@ dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-compiler-embeddable")
 
     compileOnly("com.google.auto.service:auto-service-annotations:1.0.1")
-    kapt("com.google.auto.service:auto-service:1.0-rc7")
+    kapt("com.google.auto.service:auto-service:1.0.1")
 }
 
 buildConfig {

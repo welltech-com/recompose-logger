@@ -8,6 +8,7 @@ The plugin also highlights composable functions during recomposition
 </video>
 
 ## requirements:
+- v1.3.0: kotlin 1.8.0
 - v1.2.0: kotlin 1.7.20
 - v1.1.0: kotlin 1.7.0
 

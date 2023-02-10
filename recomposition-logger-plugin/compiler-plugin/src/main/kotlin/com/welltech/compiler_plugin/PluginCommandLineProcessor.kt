@@ -10,8 +10,10 @@ import org.jetbrains.kotlin.config.CompilerConfigurationKey
 import com.welltech.compiler_plugin.BuildConfig.KEY_RECOMPOSITION_LOGS_TAG
 import com.welltech.compiler_plugin.BuildConfig.KEY_LOG_FILE
 import com.welltech.compiler_plugin.BuildConfig.KOTLIN_PLUGIN_ID
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import java.io.File
 
+@OptIn(ExperimentalCompilerApi::class)
 @AutoService(CommandLineProcessor::class)
 class PluginCommandLineProcessor : CommandLineProcessor {
   object Keys {

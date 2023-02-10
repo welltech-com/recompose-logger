@@ -51,5 +51,5 @@ publishing {
 }
 
 dependencies {
-    compileOnly("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
+    compileOnly("androidx.compose.ui:ui-tooling:${Versions.composeToolingVersion}")
 }
