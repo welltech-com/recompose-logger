@@ -1,3 +1,7 @@
+# 1.5.0
+
+- updated kotlin to 1.8.20 and compose compiler to 1.4.6
+- 
 # 1.4.0
 
 - updated kotlin to 1.8.10 and compose compiler to 1.4.3
