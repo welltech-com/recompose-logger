@@ -3,9 +3,11 @@
 This plugin makes it easy to debug composable functions by adding logs to each function.
 The plugin also highlights composable functions during recomposition
 
-<video width="320" height="640" controls>
-  <source src="sample_record.mov" type="video/mp4">
-</video>
+
+
+https://user-images.githubusercontent.com/105854390/235658540-90d394cd-9154-4a20-83ae-e94e718da580.mov
+
+
 
 ## requirements:
 - v1.5.0: kotlin 1.8.20
