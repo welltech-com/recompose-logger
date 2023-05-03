@@ -1,8 +1,8 @@
 package com.welltech.gradle_plugin
 
+import com.welltech.gradle_plugin.extension.RecompositionLoggerGradleExtension
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import com.welltech.gradle_plugin.extension.RecompositionLoggerGradleExtension
 import org.jetbrains.kotlin.gradle.plugin.*
 
 class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
@@ -19,11 +19,11 @@ class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
         groupId = BuildConfig.KOTLIN_PLUGIN_GROUP,
         artifactId = BuildConfig.KOTLIN_PLUGIN_NAME,
-        version = BuildConfig.KOTLIN_PLUGIN_VERSION
+        version = BuildConfig.KOTLIN_PLUGIN_VERSION,
     )
 
     override fun applyToCompilation(
-        kotlinCompilation: KotlinCompilation<*>
+        kotlinCompilation: KotlinCompilation<*>,
     ): Provider<List<SubpluginOption>> {
         val project = kotlinCompilation.target.project
         val extension = project.extensions.getByType(RecompositionLoggerGradleExtension::class.java)
@@ -42,43 +42,55 @@ class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
             }
         }
         val logsTag = extension.tag ?: BuildConfig.DEFAULT_RECOMPOSITION_LOGS_TAG
+        val useRebugger = extension.useRebugger ?: BuildConfig.DEFAULT_USE_REBUGGER
 
         val supportLibDependency = extension.supportLibDependency
+        val runtimeLibs = if (useRebugger) {
+            listOf(BuildConfig.RUNTIME_LIB, BuildConfig.REBUGGER_LIB)
+        } else {
+            listOf(BuildConfig.RUNTIME_LIB)
+        }
+
+        if (useRebugger) {
+            project.repositories.maven {
+                it.setUrl("https://jitpack.io")
+            }
+        }
 
         kotlinCompilation.dependencies {
-            when(supportLibDependency) {
-                "none" -> { /*do nothing*/ }
-                "api" -> {
-                    if (pluginEnabled) api(BuildConfig.RUNTIME_LIB)
-                    api(BuildConfig.ANNOTATIONS_LIB)
-                }
-                "compileOnly" -> {
-                    if (pluginEnabled) compileOnly(BuildConfig.RUNTIME_LIB)
-                    compileOnly(BuildConfig.ANNOTATIONS_LIB)
-                }
-                else -> {
-                    if (pluginEnabled) implementation(BuildConfig.RUNTIME_LIB)
-                    implementation(BuildConfig.ANNOTATIONS_LIB)
-                }
+            val applyDependency: ((Any) -> Unit)? = when (supportLibDependency) {
+                "none" -> null
+                "api" -> ::api
+                "compileOnly" -> ::compileOnly
+                else -> ::implementation
             }
+
+            if (pluginEnabled) {
+                runtimeLibs.forEach { applyDependency?.invoke(it) }
+            }
+            applyDependency?.invoke(BuildConfig.ANNOTATIONS_LIB)
         }
 
         return project.provider {
             listOfNotNull(
                 SubpluginOption(
                     key = BuildConfig.KEY_RECOMPOSITION_LOGS_ENABLED,
-                    value = pluginEnabled.toString()
+                    value = pluginEnabled.toString(),
                 ),
                 SubpluginOption(
                     key = BuildConfig.KEY_RECOMPOSITION_LOGS_TAG,
-                    value = logsTag
+                    value = logsTag,
                 ),
                 logFile?.let {
                     SubpluginOption(
                         key = BuildConfig.KEY_LOG_FILE,
-                        value = it.absolutePath
+                        value = it.absolutePath,
                     )
-                }
+                },
+                SubpluginOption(
+                    key = BuildConfig.KEY_USE_REBUGGER,
+                    value = useRebugger.toString(),
+                ),
             )
         }
     }

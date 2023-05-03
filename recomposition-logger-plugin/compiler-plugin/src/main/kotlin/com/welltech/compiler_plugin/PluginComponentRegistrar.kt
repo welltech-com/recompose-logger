@@ -17,30 +17,40 @@ class PluginComponentRegistrar : ComponentRegistrar {
 
     override fun registerProjectComponents(
         project: MockProject,
-        configuration: CompilerConfiguration
+        configuration: CompilerConfiguration,
     ) {
         val enabled = configuration.get(
             PluginCommandLineProcessor.Keys.logEnabled,
-            BuildConfig.DEFAULT_RECOMPOSITION_LOGS_ENABLED
+            BuildConfig.DEFAULT_RECOMPOSITION_LOGS_ENABLED,
         )
         val logTag = configuration.get(
             PluginCommandLineProcessor.Keys.logTag,
-            BuildConfig.DEFAULT_RECOMPOSITION_LOGS_TAG
+            BuildConfig.DEFAULT_RECOMPOSITION_LOGS_TAG,
         )
 
         val logFile = configuration.get(
-            PluginCommandLineProcessor.Keys.logFile
+            PluginCommandLineProcessor.Keys.logFile,
         )
 
-        val logger = when(logFile) {
+        val useRebugger = configuration.get(
+            PluginCommandLineProcessor.Keys.useRebugger,
+            BuildConfig.DEFAULT_USE_REBUGGER,
+        )
+
+        val logger = when (logFile) {
             null -> EmptyLogger()
             else -> FileLogger(logFile)
         }
 
-
         if (enabled) {
-            IrGenerationExtension.registerExtension(project, LogsGenerationExtension(tag = logTag))
-            IrGenerationExtension.registerExtension(project, HighlightGenerationExtension(logger))
+            IrGenerationExtension.registerExtension(
+                project = project,
+                extension = LogsGenerationExtension(tag = logTag, useRebugger = useRebugger),
+            )
+            IrGenerationExtension.registerExtension(
+                project = project,
+                extension = HighlightGenerationExtension(logger),
+            )
         }
     }
 }

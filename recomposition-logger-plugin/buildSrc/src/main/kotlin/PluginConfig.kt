@@ -22,4 +22,6 @@ class PluginConfig internal constructor(private val project: Project) {
 
     val runtimeLib = "$group:$runtimeLibArtifact:$version"
     val annotationsLib = "$group:$annotationsLibArtifact:$version"
+
+    val rebuggerLib = "com.github.theapache64:rebugger:1.0.0-alpha02"
 }

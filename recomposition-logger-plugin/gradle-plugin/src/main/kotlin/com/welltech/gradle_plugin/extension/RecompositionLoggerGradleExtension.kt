@@ -4,16 +4,18 @@ import java.io.File
 
 abstract class RecompositionLoggerGradleExtension {
 
-  abstract var logFile: File?
+    abstract var logFile: File?
 
-  /**
-   * available: none, implementation, api, compileOnly. Default - implementation
-   */
-  abstract var supportLibDependency: String?
+    /**
+     * available: none, implementation, api, compileOnly. Default - implementation
+     */
+    abstract var supportLibDependency: String?
 
-  abstract var enabled: Boolean?
+    abstract var enabled: Boolean?
 
-  abstract var tag: String?
+    abstract var tag: String?
+
+    abstract var useRebugger: Boolean?
 
 }
 

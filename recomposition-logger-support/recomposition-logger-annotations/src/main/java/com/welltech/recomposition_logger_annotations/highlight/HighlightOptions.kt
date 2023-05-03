@@ -11,5 +11,5 @@ data class HighlightOptions(
     val enabled: Boolean = false,
     val durationMillis: Long = 100,
     val normalColor: Color = Color.Green,
-    val recompositionColor: Color = Color.Red
+    val recompositionColor: Color = Color.Red,
 )

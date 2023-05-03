@@ -4,8 +4,8 @@ import java.io.File
 import java.io.FileOutputStream
 
 class FileLogger(
-    logFile: File
-): Logger {
+    logFile: File,
+) : Logger {
 
     private val file = if (logFile.isDirectory) {
         File(logFile, "recomposition-compiler-logs.txt")
