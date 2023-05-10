@@ -1,3 +1,7 @@
+# 1.6.0-alpha01
+
+- added experimental support of [Rebugger](https://github.com/theapache64/rebugger)
+
 # 1.5.0
 
 - updated kotlin to 1.8.20 and compose compiler to 1.4.6

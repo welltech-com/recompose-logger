@@ -14,8 +14,8 @@ fun IrFunction.shouldAddLogsAndHighlight(pluginContext: IrPluginContext): Boolea
     val isAnonymousFunction = this is IrSimpleFunction && (name.toString() == "<anonymous>")
 
     return body != null
-            && hasAnnotation(composableAnnotationName)
-            && !isAnonymousFunction
-            && !hasAnnotation(disableLogAnnotationName)
-            && returnType == pluginContext.irBuiltIns.unitType
+        && hasAnnotation(composableAnnotationName)
+        && !isAnonymousFunction
+        && !hasAnnotation(disableLogAnnotationName)
+        && returnType == pluginContext.irBuiltIns.unitType
 }

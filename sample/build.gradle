@@ -13,7 +13,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.welltech:recomposition-logger-plugin:1.5.0'
+        classpath 'com.welltech:recomposition-logger-plugin:1.6.0-alpha01'
     }
 }
 
@@ -71,6 +71,7 @@ recompositionLogger {
     enabled = true
     tag = "SampleRecomposition" // tag for recomposition logs
     logFile = projectDir
+    useRebugger = true
 }
 
 dependencies {

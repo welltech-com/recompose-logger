@@ -14,9 +14,8 @@ import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.welltech.recomposition_logger_annotations.highlight.debugHighlightOptions
-import kotlinx.coroutines.delay
 import com.welltech.recomposition_logger_runtime.CompositionCounter
-import kotlin.random.Random
+import kotlinx.coroutines.delay
 
 /**
  * Draw rect around composable to which this modifier is applied.
@@ -29,7 +28,7 @@ fun Modifier.highlightRecomposition(funName: String) = composed(
     inspectorInfo = debugInspectorInfo {
         name = "recomposeHighlighter"
         properties["funName"] = funName
-    }
+    },
 ) {
     if (debugHighlightOptions.enabled.not()) {
         return@composed this
@@ -77,7 +76,7 @@ fun Modifier.highlightRecomposition(funName: String) = composed(
                 color = Color.Black,
                 topLeft = Offset(size.width - textWidth, 0f),
                 size = Size(textWidth, 10.sp.toPx()),
-                alpha = 0.5f
+                alpha = 0.5f,
             )
             drawContext.canvas.nativeCanvas.drawText(funName, size.width - textWidth, 20f, paint)
         }

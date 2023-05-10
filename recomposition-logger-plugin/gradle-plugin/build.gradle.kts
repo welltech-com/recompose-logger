@@ -28,6 +28,7 @@ buildConfig {
     buildConfigField("String", "KOTLIN_PLUGIN_VERSION", "\"${pluginConfig.version}\"")
     buildConfigField("String", "RUNTIME_LIB", "\"${pluginConfig.runtimeLib}\"")
     buildConfigField("String", "ANNOTATIONS_LIB", "\"${pluginConfig.annotationsLib}\"")
+    buildConfigField("String", "REBUGGER_LIB", "\"${pluginConfig.rebuggerLib}\"")
 }
 
 tasks.withType<KotlinCompile> {

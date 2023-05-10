@@ -10,7 +10,7 @@ https://user-images.githubusercontent.com/105854390/235658540-90d394cd-9154-4a20
 
 
 ## requirements:
-- v1.5.0: kotlin 1.8.20
+- v1.5.0+: kotlin 1.8.20
 - v1.4.0: kotlin 1.8.10
 - v1.3.0: kotlin 1.8.0
 - v1.2.0: kotlin 1.7.20
@@ -50,6 +50,7 @@ Other plugin options:
   May be useful in multi-module project (for example: in app module use "implementation", in other modules "compileOnly")
 - `enabled [Boolean]` - when false, plugin don't add any additional code for debug functionality. By default it false for release and true for debug
 - `tag [String, default: "RecompositionLog"]` - tag for recomposition logs.
+- `useRebugger [Boolean]` - use [Rebugger](https://github.com/theapache64/rebugger) for logging (experimental)
 
 # Features
 

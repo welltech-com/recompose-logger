@@ -21,7 +21,7 @@ import com.welltech.compiler_plugin.debug_logger.Logger
 import org.jetbrains.kotlin.backend.common.extensions.FirIncompatiblePluginAPI
 
 class HighlightGenerationExtension(
-    private val logger: Logger
+    private val logger: Logger,
 ) : IrGenerationExtension {
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
         moduleFragment.transform(HighlightTransformer(pluginContext, logger), null)
@@ -31,20 +31,21 @@ class HighlightGenerationExtension(
 @OptIn(FirIncompatiblePluginAPI::class)
 private class HighlightTransformer(
     private val pluginContext: IrPluginContext,
-    private val logger: Logger
+    private val logger: Logger,
 ) : IrElementTransformerVoidWithContext() {
 
-    private val funHighlight = pluginContext.referenceFunctions(FqName("com.welltech.recomposition_logger_runtime.highlight.highlightRecomposition"))
+    private val funHighlight =
+        pluginContext.referenceFunctions(FqName("com.welltech.recomposition_logger_runtime.highlight.highlightRecomposition"))
             .single {
                 val parameters = it.owner.valueParameters
                 parameters.size == 1
-                        && parameters[0].type == pluginContext.irBuiltIns.stringType
+                    && parameters[0].type == pluginContext.irBuiltIns.stringType
             }
 
     private val initialModifier = pluginContext.referenceClass(FqName("androidx.compose.ui.Modifier.Companion"))!!
 
     override fun visitFunctionNew(declaration: IrFunction): IrStatement {
-        if (declaration.shouldAddLogsAndHighlight(pluginContext) ) {
+        if (declaration.shouldAddLogsAndHighlight(pluginContext)) {
             logger.logMsg("visit new composable fun: ${declaration.name}")
             DeclarationIrBuilder(pluginContext, declaration.symbol)
                 .findAndModifyComposeFunctions(declaration.name.toString(), declaration.body!!.statements)
@@ -67,8 +68,8 @@ private class HighlightTransformer(
 
     private fun IrStatement.isComposableCallWithModifier(): Boolean {
         return this is IrCall
-                && symbol.owner.hasAnnotation(composableAnnotationName)
-                && getModifierArgument() != null
+            && symbol.owner.hasAnnotation(composableAnnotationName)
+            && getModifierArgument() != null
     }
 
     private fun IrBuilderWithScope.addHighlightModifier(funName: String, irCallStatement: IrCall) {
