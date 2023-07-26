@@ -8,6 +8,21 @@ import org.jetbrains.kotlin.gradle.plugin.*
 class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
     override fun apply(target: Project): Unit = with(target) {
         extensions.create("recompositionLogger", RecompositionLoggerGradleExtension::class.java)
+        afterEvaluate {
+            val extension = project.extensions.getByType(RecompositionLoggerGradleExtension::class.java)
+            val supportLibDependency = extension.supportLibConfigurationName ?: "debugImplementation"
+            val useRebugger = extension.useRebugger ?: BuildConfig.DEFAULT_USE_REBUGGER
+
+            val runtimeLibs = if (useRebugger) {
+                listOf(BuildConfig.RUNTIME_LIB, BuildConfig.REBUGGER_LIB)
+            } else {
+                listOf(BuildConfig.RUNTIME_LIB)
+            }
+
+            runtimeLibs.forEach { dependencies.add(supportLibDependency, it) }
+
+            dependencies.add("implementation", BuildConfig.ANNOTATIONS_LIB)
+        }
     }
 
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
@@ -44,31 +59,10 @@ class RecompositionLoggerGradlePlugin : KotlinCompilerPluginSupportPlugin {
         val logsTag = extension.tag ?: BuildConfig.DEFAULT_RECOMPOSITION_LOGS_TAG
         val useRebugger = extension.useRebugger ?: BuildConfig.DEFAULT_USE_REBUGGER
 
-        val supportLibDependency = extension.supportLibDependency
-        val runtimeLibs = if (useRebugger) {
-            listOf(BuildConfig.RUNTIME_LIB, BuildConfig.REBUGGER_LIB)
-        } else {
-            listOf(BuildConfig.RUNTIME_LIB)
-        }
-
         if (useRebugger) {
             project.repositories.maven {
                 it.setUrl("https://jitpack.io")
             }
-        }
-
-        kotlinCompilation.dependencies {
-            val applyDependency: ((Any) -> Unit)? = when (supportLibDependency) {
-                "none" -> null
-                "api" -> ::api
-                "compileOnly" -> ::compileOnly
-                else -> ::implementation
-            }
-
-            if (pluginEnabled) {
-                runtimeLibs.forEach { applyDependency?.invoke(it) }
-            }
-            applyDependency?.invoke(BuildConfig.ANNOTATIONS_LIB)
         }
 
         return project.provider {
