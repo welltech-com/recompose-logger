@@ -8,6 +8,13 @@ extensions.configure<SigningExtension> {
     sign(publishing.publications)
 }
 
+
+project.afterEvaluate {
+    tasks.withType<AbstractPublishToMaven> {
+        dependsOn(tasks.named("bundleReleaseAar"))
+    }
+}
+
 publishing {
     setupPublishingRepositories(project)
 

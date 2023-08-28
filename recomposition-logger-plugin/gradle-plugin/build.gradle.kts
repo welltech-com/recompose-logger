@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.internal.KaptTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -7,7 +8,7 @@ plugins {
     id("plugin-options-config")
     `maven-publish`
     `signing`
-    id("org.jetbrains.dokka") version "1.7.10"
+    id("org.jetbrains.dokka") version "1.8.20"
 }
 
 version = pluginConfig.version
@@ -32,11 +33,12 @@ buildConfig {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "17"
 }
 
-val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
-
+val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class) {
+    dependsOn(tasks.withType<KaptTask>())
+}
 val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
     dependsOn(dokkaHtml)
     archiveClassifier.set("javadoc")
@@ -44,8 +46,8 @@ val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 gradlePlugin {

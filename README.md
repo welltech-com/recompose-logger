@@ -10,6 +10,7 @@ https://user-images.githubusercontent.com/105854390/235658540-90d394cd-9154-4a20
 
 
 ## requirements:
+- v1.7.0: kotlin 1.9.0
 - v1.6.x: kotlin 1.8.21
 - v1.5.0: kotlin 1.8.20
 - v1.4.0: kotlin 1.8.10
