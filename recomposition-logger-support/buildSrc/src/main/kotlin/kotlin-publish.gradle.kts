@@ -13,6 +13,10 @@ project.afterEvaluate {
     tasks.withType<AbstractPublishToMaven> {
         dependsOn(tasks.named("bundleReleaseAar"))
     }
+
+    tasks.withType<Sign> {
+        dependsOn(tasks.named("bundleReleaseAar"))
+    }
 }
 
 publishing {
