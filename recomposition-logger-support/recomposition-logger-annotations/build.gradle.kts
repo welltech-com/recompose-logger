@@ -5,11 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    namespace = "com.welltech.recomposition_logger_annotations"
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 33
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFile("consumer-rules.pro")
