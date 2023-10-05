@@ -18,7 +18,7 @@ allprojects {
 
     project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.toString()
+            jvmTarget = JavaVersion.VERSION_17.toString()
             freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                     "-Xopt-in=kotlin.ExperimentalStdlibApi",
