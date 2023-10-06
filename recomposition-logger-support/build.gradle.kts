@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.3.1")
+        classpath("com.android.tools.build:gradle:8.0.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${config.kotlinVersion}")
     }
 }
@@ -18,7 +18,7 @@ allprojects {
 
     project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class).all {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.toString()
+            jvmTarget = JavaVersion.VERSION_17.toString()
             freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                     "-Xopt-in=kotlin.ExperimentalStdlibApi",
