@@ -1,3 +1,7 @@
+# 1.7.2
+
+- updated kotlin to 1.9.20 and compose compiler to 1.5.5
+
 # 1.7.1
 
 - updated kotlin to 1.9.10 and compose compiler to 1.5.3
