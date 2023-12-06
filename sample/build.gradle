@@ -1,8 +1,8 @@
 buildscript {
     ext{
-        kotlin_version = '1.9.10'
+        kotlin_version = '1.9.20'
         compose_bom_version = '2023.10.00'
-        compose_compiler_version = '1.5.3'
+        compose_compiler_version = '1.5.5'
     }
 
     repositories {
@@ -13,7 +13,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.welltech:recomposition-logger-plugin:1.7.1'
+        classpath 'com.welltech:recomposition-logger-plugin:1.7.2'
     }
 }
 
