@@ -1,3 +1,11 @@
+# 1.7.4
+
+- updated kotlin to 1.9.24 and compose compiler to 1.5.14
+
+# 1.7.3
+
+- updated kotlin to 1.9.22 and compose compiler to 1.5.9
+
 # 1.7.2
 
 - updated kotlin to 1.9.20 and compose compiler to 1.5.5
