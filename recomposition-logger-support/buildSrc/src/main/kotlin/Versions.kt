@@ -1,4 +1,4 @@
 object Versions {
     val composeToolingVersion = "1.5.0"
-    val composeCompilerVersion = "1.5.9"
+    val composeCompilerVersion = "1.5.14"
 }
